@@ -30,8 +30,10 @@ jobs:
         needs: Unit-Testing
 
         steps:
-        - name: Run Docker container
-          run: docker run -d -p 8000:8000 abhi0874/chatapp-multistage:v1
+        - name: Pull Docker Image
+          run: |
+            docker pull abhi0874/chatapp-multistage:v1
+            docker images
         
-        - name: Display running containers
-          run: docker ps | grep abhi0874/chatapp-multistage
+        - name: Run Docker Container
+          run: docker run -d -p 8000:8000 abhi0874/chatapp-multistage:v1
