@@ -1,5 +1,13 @@
 name: chat-app
-on: push
+on: 
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'helm/**'
+      - 'k8s/**'
+  workflow_dispatch:
 
 env:
     DATABASE_URI: ${{secrets.DATABASE_URI}}
