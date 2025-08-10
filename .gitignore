@@ -26,3 +26,9 @@ secrets.yaml
 *.njsproj
 *.sln
 *.sw?
+
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+

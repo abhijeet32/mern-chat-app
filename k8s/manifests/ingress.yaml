@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 
 spec:
-  IngressClassName: nginx
+  ingressClassName: nginx
   rules:
   - host: "chatapp.example.com"
     http:
