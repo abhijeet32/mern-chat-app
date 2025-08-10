@@ -34,7 +34,7 @@ jobs:
       - name: Run SonarQube Scanner
         uses: sonarsource/sonarcloud-github-action@v2
         with:
-          projectBaseDir: app/src
+          projectBaseDir: frontend/src
           args: >
             -Dsonar.projectKey=${{secrets.PROJECT_KEY}}
             -Dsonar.organization=${{secrets.ORG_KEY}}
