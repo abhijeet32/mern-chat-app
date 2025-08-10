@@ -6,7 +6,8 @@
 	"scripts": {
 		"server": "nodemon backend/server.js",
 		"start": "node backend/server.js",
-		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+		"lint": "eslint ."
 	},
 	"type": "module",
 	"keywords": [],
@@ -22,6 +23,7 @@
 		"socket.io": "^4.7.4"
 	},
 	"devDependencies": {
+		"eslint": "^9.33.0",
 		"nodemon": "^3.0.3"
 	}
 }
