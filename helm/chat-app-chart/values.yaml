@@ -8,7 +8,11 @@ image:
   repository: abhi0874/chatapp-multistage
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
+<<<<<<< HEAD
   tag: "10016307834"
+=======
+  tag: "16976183857"
+>>>>>>> 772f5433a309ab7a8be503cd93d0d53806b43dab
 
 ingress:
   enabled: false
