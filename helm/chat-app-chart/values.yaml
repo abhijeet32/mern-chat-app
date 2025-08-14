@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+namespace: chat-app
 
 image:
   repository: abhi0874/chat-app
