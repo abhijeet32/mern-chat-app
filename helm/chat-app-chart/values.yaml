@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: abhishekf5/go-web-app
+  repository: abhi0874/chat-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "16976183857"
