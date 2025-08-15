@@ -2,19 +2,19 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: chat-app
+  namespace: default
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-
 spec:
   ingressClassName: nginx
   rules:
-  - host: "chatapp.example.com"
-    http:
-      paths:
-      - path: "/"
-        pathType: Prefix
-        backend:
-          service:
-            name: chat-app
-            port: 
-              number: 80
+    - host: chatapp.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-app
+                port:
+                  number: 80

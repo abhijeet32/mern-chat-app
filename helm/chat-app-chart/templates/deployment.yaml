@@ -2,10 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: chat-app
-  namespace: {{ .Values.namespace }}
-  labels:
-    app: chat-app
-
+  namespace: default
+labels:
+  app: chat-app
 spec:
   replicas: 2
   selector:
@@ -17,12 +16,12 @@ spec:
         app: chat-app
     spec:
       containers:
-      - name: chat-app-container
-        image: abhi0874/chat-app:{{ .Values.image.tag }}
-        ports:
-        - containerPort: 8000
+        - name: chat-app
+          image: abhi0874/chat-app:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 8000
 
-        env:
+      env:
           - name: MONGO_DB_URI
             valueFrom:
               secretKeyRef:
