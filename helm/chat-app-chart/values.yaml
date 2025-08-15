@@ -6,10 +6,10 @@ replicaCount: 1
 namespace: chat-app
 
 image:
-  repository: abhi0874/chat-app
+  repository: abhi0874/chatapp-multistage
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "16976183857"
+  tag: "v1"
 
 ingress:
   enabled: false
