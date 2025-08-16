@@ -4,9 +4,6 @@
 
 replicaCount: 1
 
-fullnameOverride: chat-app
-namespace: chat-app
-
 image:
   repository: abhi0874/chat-app
   pullPolicy: IfNotPresent
@@ -14,13 +11,12 @@ image:
   tag: "16997233227"
 
 ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: chart-example.local
+    - host: chatapp.example.com
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
