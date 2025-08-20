@@ -119,7 +119,7 @@ resource "aws_security_group" "chat_app_node_sg" {
     }
 }
 
-resource "aws_security_group_rule" "Allow Node to cluster" {
+resource "aws_security_group_rule" "chat_app_node_to_cluster" {
     description = "Allow all trafic from node security group to cluster security group"
     type = "ingress"
     from_port = 0
