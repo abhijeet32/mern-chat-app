@@ -21,18 +21,18 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
 
-      env:
-      - name: MONGO_DB_URI
-        valueFrom:
-        secretKeyRef:
-          name: chat-app-db-secret
-          key: MONGO_DB_URI
+          env:
+            - name: MONGO_DB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: chat-app-db-secret
+                  key: MONGO_DB_URI
 
-      - name: JWT_SECRET
-        valueFrom:
-        secretKeyRef:
-          name: chat-app-db-secret
-          key: JWT_SECRET
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: chat-app-db-secret
+                  key: JWT_SECRET
 
 
       readinessProbe:
