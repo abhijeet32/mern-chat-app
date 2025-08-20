@@ -119,6 +119,16 @@ resource "aws_security_group" "chat_app_node_sg" {
     }
 }
 
+resource "aws_security_group_rule" "Allow Node to cluster" {
+    description = "Allow all trafic from node security group to cluster security group"
+    type = "ingress"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    security_group_id = aws_security_group.chat_app_cluster_sg.id
+    source_security_group_id = aws_security_group.chat_app_node_sg.id
+}
+
 resource "aws_eks_cluster" "chat_app" {
     name     = "chat-app-cluster"
     role_arn = aws_iam_role.chat_app_cluster_role.arn

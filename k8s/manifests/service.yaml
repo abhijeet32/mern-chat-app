@@ -5,11 +5,11 @@ metadata:
   labels:
     app: chat-app
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: chat-app
   ports:
     - protocol: TCP
-      port: 8000
+      port: 80
       targetPort: 8000
-      NodePort: 30080
+      # NodePort: 30080
