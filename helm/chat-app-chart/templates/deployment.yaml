@@ -33,3 +33,17 @@ spec:
               secretKeyRef:
                 name: chat-app-db-secret
                 key: JWT_SECRET
+
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: {{ .Values.service.targetPort }}
+        initialDelaySeconds: 5
+        periodSeconds: 10
+
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
