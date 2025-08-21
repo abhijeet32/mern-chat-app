@@ -13,4 +13,4 @@ spec:
               service:
                 name: chat-app
                 port:
-                  number: {{ .Values.service.port }}
+                  number: 8000
