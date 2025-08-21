@@ -17,9 +17,6 @@ service:
 
 ingress:
   enabled: true
-  className: nginx
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
     - host: chatapp.example.com
       paths:
