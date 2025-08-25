@@ -5,9 +5,10 @@ metadata:
   labels:
     app: chat-app
 spec:
-  type: LoadBalancer
+  type: {{ .Values.service.type }}
   selector:
     app: chat-app
   ports:
-    - port: 8000
-      targetPort: 8000
+    - port: {{ (index .Values.service.ports 0).port }}
+      targetPort: {{ (index .Values.service.ports 0).targetPort }}
+      nodePort: {{ (index .Values.service.ports 0).nodePort }}

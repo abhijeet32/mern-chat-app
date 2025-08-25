@@ -4,6 +4,8 @@ provider "aws" {
 
 resource "aws_vpc" "chat_app_vpc" {
     cidr_block = "10.0.0.0/16"
+    enable_dns_support = true
+    enable_dns_hostnames = true
     
     tags = {
     Name = "chat-app-vpc"
@@ -51,15 +53,25 @@ resource "aws_route_table_association" "a" {
 
 resource "aws_security_group" "chat_app_cluster_sg" {
     vpc_id = aws_vpc.chat_app_vpc.id
+    
 
+    #Allow inbound EKS API access
     ingress {
-        description = "Allow EKS API access"
         from_port = 443
         to_port = 443
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = ["103.47.74.130/32"]
     }
-    
+
+    # Allow worker nodes to talk to the cluster
+    ingress {
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        security_groups = [aws_security_group.chat_app_node_sg.id]
+    }
+
+    # Allow all outbound
     egress {
         from_port = 0
         to_port = 0
@@ -75,38 +87,31 @@ resource "aws_security_group" "chat_app_cluster_sg" {
 resource "aws_security_group" "chat_app_node_sg" {
     vpc_id = aws_vpc.chat_app_vpc.id
 
+    # Allow NodePort range
     ingress {
-        description = "Allow all traffic from the cluster security group"
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        security_groups = [aws_security_group.chat_app_cluster_sg.id]
-    }
-
-    ingress {
-        description = "Allow HTTP traffic"
-        from_port = 80
-        to_port = 80
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        description = "Allow HTTPS traffic"
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        description = "Allow NodePort access from Internet"
         from_port = 30000
         to_port = 32767
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
 
+    # Allow HTTP
+    ingress {
+        from_port = 80
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    # Allow HTTPS
+    ingress {
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    # Egress - allow all outbound
     egress {
         from_port = 0
         to_port = 0
@@ -119,23 +124,24 @@ resource "aws_security_group" "chat_app_node_sg" {
     }
 }
 
-resource "aws_security_group_rule" "chat_app_node_to_cluster" {
-    description = "Allow all trafic from node security group to cluster security group"
-    type = "ingress"
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    security_group_id = aws_security_group.chat_app_cluster_sg.id
-    source_security_group_id = aws_security_group.chat_app_node_sg.id
-}
+resource "aws_security_group" "admin_ssh" {
+    vpc_id = aws_vpc.chat_app_vpc.id
 
-resource "aws_eks_cluster" "chat_app" {
-    name     = "chat-app-cluster"
-    role_arn = aws_iam_role.chat_app_cluster_role.arn
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = [ "0.0.0.0/0" ]
+    }
 
-    vpc_config {
-        subnet_ids = aws_subnet.chat_app_subnet[*].id
-        security_group_ids = [aws_security_group.chat_app_cluster_sg.id]
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    tags = {
+        name = "admin-ssh"
     }
 }
 
@@ -195,6 +201,22 @@ resource "aws_iam_role_policy_attachment" "chat_app_node_group_cni_policy" {
 resource "aws_iam_role_policy_attachment" "chat_app_node_group_registry_policy" {
     role       = aws_iam_role.chat_app_node_group_role.name
     policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+resource "aws_eks_cluster" "chat_app" {
+    name     = "chat-app-cluster"
+    role_arn = aws_iam_role.chat_app_cluster_role.arn
+
+    vpc_config {
+        subnet_ids = aws_subnet.chat_app_subnet[*].id
+        security_group_ids = [aws_security_group.chat_app_cluster_sg.id]
+        endpoint_public_access = true
+        endpoint_private_access = false
+    }
+
+    depends_on = [
+        aws_iam_role_policy_attachment.chat_app_cluster_role_policy
+    ]
 }
 
 resource "aws_eks_node_group" "chat_app" {

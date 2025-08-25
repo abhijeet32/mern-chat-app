@@ -19,7 +19,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.targetPort }}
+            - containerPort: {{ (index .Values.service.ports 0).targetPort }}
 
           env:
             - name: MONGO_DB_URI
@@ -35,16 +35,16 @@ spec:
                   key: JWT_SECRET
 
 
-      readinessProbe:
-        httpGet:
-          path: /healthz
-          port: {{ .Values.service.targetPort }}
-        initialDelaySeconds: 5
-        periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ (index .Values.service.ports 0).targetPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
 
-      livenessProbe:
-        httpGet:
-          path: /healthz
-          port: {{ .Values.service.targetPort }}
-          initialDelaySeconds: 15
-          periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ (index .Values.service.ports 0).targetPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
