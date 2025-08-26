@@ -4,6 +4,7 @@ metadata:
   name: chat-app
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-pass-headers: "Authorization"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
 spec:
