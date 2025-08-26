@@ -8,7 +8,7 @@ image:
   repository: abhi0874/chat-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "17247915648"
+  tag: "17248071201"
 
 service:
   type: NodePort
