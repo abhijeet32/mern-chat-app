@@ -15,7 +15,7 @@ export const SocketContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (authUser) {
-			const socket = io("http://localhost:5000/", {
+			const socket = io("http://chatapp.example.com/", {
 				auth: {
 					token: import.meta.env.JWT_SECRET,
 				},
