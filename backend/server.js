@@ -10,7 +10,7 @@ import userRoutes from "./routes/user.routes.js";
 
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
-
+app.set('trust proxy', 1);
 dotenv.config();
 
 const __dirname = path.resolve();
