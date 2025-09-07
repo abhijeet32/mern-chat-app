@@ -47,6 +47,11 @@ This project uses the following AWS resources:
 ```shell
 docker pull abhi0874/chatapp-multistage:v1
 ```
+### Run the container
+```shell
+docker run chatapp-multistage
+``` 
+
 ## GitHub Actions CI
 ![Ci Diagram](./images/CI.png)
 
